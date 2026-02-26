@@ -571,8 +571,7 @@ Key differences:
 use stylus_sdk::call::RawCall;
 
 let result = unsafe {
-    RawCall::new(self.vm())
-        .value(amount)
+    RawCall::new_with_value(self.vm(), amount)
         .call(address, &data)
 };
 ```
@@ -597,9 +596,9 @@ new MyContract{value: amount}(arg1, arg2);
 use stylus_sdk::deploy::RawDeploy;
 
 let contract_address = unsafe {
-    RawDeploy::new(self.vm())
-        .value(amount)
-        .deploy(&bytecode, salt)?
+    RawDeploy::new()
+        .salt(salt)
+        .deploy(self.vm(), &bytecode, amount)?
 };
 ```
 
@@ -711,6 +710,8 @@ Stylus and Solidity contracts can fully interact:
 Example calling Solidity from Stylus:
 
 ```rust
+use stylus_sdk::call::Call;
+
 sol_interface! {
     interface IToken {
         function transfer(address to, uint256 amount) external returns (bool);
@@ -719,9 +720,9 @@ sol_interface! {
 
 #[public]
 impl MyContract {
-    pub fn call_token(&self, token: Address, recipient: Address, amount: U256) -> Result<bool, Vec<u8>> {
+    pub fn call_token(&mut self, token: Address, recipient: Address, amount: U256) -> Result<bool, Vec<u8>> {
         let token_contract = IToken::new(token);
-        let result = token_contract.transfer(self.vm(), recipient, amount)?;
+        let result = token_contract.transfer(self.vm(), Call::new_mutating(self), recipient, amount)?;
         Ok(result)
     }
 }
