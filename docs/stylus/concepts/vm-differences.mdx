@@ -33,12 +33,12 @@ PUSH1 0x03    // Push 3 onto stack
 ADD           // Pop 2 values, push sum (5)
 ```
 
-### WASM: Register-based architecture
+### WASM: Stack-based architecture
 
-The Stylus WASM VM uses a register-based execution model:
+The Stylus WASM VM also uses a stack-based execution model, though it offers a richer instruction set and compiles from modern languages (Rust, C, C++) rather than Solidity:
 
-- **Operations**: Work with virtual registers and local variables
-- **Instructions**: Thousands of WASM instructions with fine-grained metering
+- **Operations**: Work with values on an implicit operand stack, using local variables as function-scoped storage slots
+- **Instructions**: ~200 core instructions in the MVP spec, with additional instructions available through WASM extensions and fine-grained metering
 - **Memory**: Linear memory with explicit grow operations
 - **Storage**: Same 256-bit storage as EVM (shared state)
 - **Call depth**: Same 1024 limit for compatibility
@@ -46,11 +46,13 @@ The Stylus WASM VM uses a register-based execution model:
 **Example WASM execution:**
 
 ```wasm
-(local.get 0)    ;; Read from local variable 0
-(local.get 1)    ;; Read from local variable 1
-(i32.add)        ;; Add and store result
-(local.set 2)    ;; Store in local variable 2
+(local.get 0)    ;; Push local variable 0 onto the stack
+(local.get 1)    ;; Push local variable 1 onto the stack
+(i32.add)        ;; Pop both values, push their sum
+(local.set 2)    ;; Pop the result and store it in local variable 2
 ```
+
+> **Note:** WASM local variables (accessed via `local.get` / `local.set`) may resemble registers, but the execution model is stack-based — all instructions implicitly consume inputs from and push outputs onto the operand stack.
 
 ## Memory model
 
