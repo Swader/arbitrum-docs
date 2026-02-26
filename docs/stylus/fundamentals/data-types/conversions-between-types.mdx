@@ -355,7 +355,7 @@ impl Counter {
 
 ## Best practices
 
-1. **Use try_from for fallible conversions**: When converting between types where overflow is possible, use `try_from` instead of panicking conversions.
+1. **Use `try_from` for fallible conversions**: When converting between types where overflow is possible, use `try_from` instead of panicking conversions.
 
 2. **Prefer native types when appropriate**: Use Rust's native `bool`, `u8`-`u128`, and `i8`-`i128` types when they match your needs exactly. They're more efficient and ergonomic.
 
