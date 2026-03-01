@@ -62,7 +62,7 @@ impl Token {
 
 **Important Notes:**
 
-- For normal L2-to-L2 transactions, behaves like EVM's `CALLER` opcode
+- For normal L2-to-L2 transactions, it behaves like EVM's `CALLER` opcode
 - For L1-to-L2 retryable ticket transactions, the top-level sender's address will be [aliased](https://developer.arbitrum.io/arbos/l1-to-l2-messaging#address-aliasing)
 - In delegate calls, returns the original caller (not the delegating contract)
 
