@@ -20,10 +20,10 @@ Using the standard Rust library often bloats contract sizes beyond the maximum s
 
 To save developers time on smart contract development, we’ve curated a list of crates and utilities we found helpful. Keep in mind that we have not audited this code, and you should always be mindful about pulling dependencies into your codebase, whether they’ve been audited or not. We provide this list for your use at your own risk.
 
-- [`rust_decimal`](https://crates.io/crates/rust_decimal): Decimal number implementation written in pure Rust. Suitable for financial and fixed-precision calculations
+- [`rust_decimal`](https://crates.io/crates/rust_decimal): Decimal number implementation written in pure Rust. Suitable for financial and fixed-precision calculations. Requires `default-features = false` in your `Cargo.toml` to avoid pulling in `std`
 - [`special`](https://crates.io/crates/special): The package provides special functions, which are mathematical functions with special names due to their common usage, such as `sin`, `ln`, `tan`, etc.
 - [`hashbrown`](https://crates.io/crates/hashbrown): Rust port of Google's SwissTable hash map
-- [`time`](https://crates.io/crates/time): Date and time library
-- [`hex`](https://crates.io/crates/hex): Encoding and decoding data into/from hexadecimal representation
+- [`time`](https://crates.io/crates/time): Date and time library. Requires `default-features = false` in your `Cargo.toml` to avoid pulling in `std`
+- [`hex`](https://crates.io/crates/hex): Encoding and decoding data into/from hexadecimal representation. Requires `default-features = false` in your `Cargo.toml` to avoid pulling in `std`
 
 We'll be adding more libraries to this list as we find them. Feel free to suggest an edit if you know of any great crates that would be generally useful here.
