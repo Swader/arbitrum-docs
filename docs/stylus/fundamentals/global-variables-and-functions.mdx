@@ -10,6 +10,14 @@ displayed_sidebar: buildStylusSidebar
 
 import { VanillaAdmonition } from '@site/src/components/VanillaAdmonition/';
 
+import ArbitrumRpcEndpoints from '../../partials/_reference-arbitrum-rpc-endpoints-partial.mdx';
+
+import ThirdPartyRpcEndpoints from '../../partials/_reference-third-party-rpc-endpoints-partial.mdx';
+
+<ArbitrumRpcEndpoints />
+
+<ThirdPartyRpcEndpoints />
+
 Stylus contracts access blockchain context and utilities through the VM (Virtual Machine) interface via `self.vm()`. This provides access to message context, block information, transaction details, account data, cryptographic functions, and gas metering.
 
 ## Accessing the VM
@@ -368,6 +376,10 @@ impl MultiChain {
 - Arbitrum One: 42161
 - Arbitrum Nova: 42170
 - Arbitrum Sepolia (testnet): 421614
+
+<ArbitrumRpcEndpoints />
+
+<ThirdPartyRpcEndpoints />
 
 ## Account information
 
