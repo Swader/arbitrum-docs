@@ -16,29 +16,26 @@ This document explains the protocol-level concepts of child-to-parent messaging.
 :::
 
 <a data-quicklook-from="arbitrum">Arbitrum</a>'s <a data-quicklook-from="outbox">outbox</a> system
-allows for arbitrary <a data-quicklook-from="child-chain">child chain</a> to <a data-quicklook-from="parent-chain">
-  parent chain
-</a> contract calls, i.e., messages initiated from the child chain, which eventually resolve in
-execution on the parent chain. Child-to-parent chain messages (aka "outgoing" messages) bear some
-things in common with Arbitrum's [parent chain to child chain
-messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which are "in reverse" though with
-differences, which we'll explore in this section.
+allows arbitrary child-to-parent chain contract calls, i.e., messages initiated from the child chain
+that will eventually resolve through execution on the parent chain.
+
+Child-to-parent chain messages (i.e., outgoing messages) bear some things in common with Arbitrum’s [parent chain to child chain messages](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which are “in reverse” with differences, which we’ll explore in this section.
 
 ## Protocol flow
 
-Messages from child to parent are included in Arbitrum's Rollup state and finalized through the Rollup Protocol. The process follows these steps:
+Messages from child to parent chains are included in Arbitrum’s Rollup state and finalized through the Rollup protocol. The process follows these steps:
 
 1. **Message creation on child chain**:
    - To initiate a child-to-parent chain message, a user or contract calls the `sendTxToL1` method on the `ArbSys` precompile.
 2. **Message inclusion in an <a data-quicklook-from="assertion">assertion</a>**:
    - The message is batched with other transactions and included in a Rollup assertion.
-   - Assertions are submitted to the Rollup contract on the parent chain and enter the dispute window (~one week).
+   - Assertions are submitted to the Rollup contract on the parent chain and enter the dispute window (6.4 days).
 3. **Assertion confirmation**:
    - If the assertion remains unchallenged after the dispute window, the Rollup contract finalizes the assertion.
    - The assertion's Merkle root gets posted to the outbox contract on the parent chain.
 4. **Execution on the parent chain**:
    - Once the assertion is confirmed, anyone can execute the message on the parent chain by proving its inclusion.
-   - Execution is possible using `Outbox.executeTransaction`, which takes a Merkle proof proving the message exists in the finalized assertion.
+   - Execution is possible via `Outbox.executeTransaction`, which accepts a Merkle proof that the message exists in the finalized assertion.
 
 ## Sending and executing messages
 
@@ -55,13 +52,13 @@ For step-by-step implementation instructions, see [How to bridge to parent chain
 
 ### Why child to parent chain messages require manual execution
 
-Unlike [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain message must undergo manual execution because Ethereum (parent chain) does not support scheduled execution.
+Unlike [retryable tickets](/how-arbitrum-works/deep-dives/l1-to-l2-messaging.mdx), which can execute automatically with pre-funded gas, child-to-parent chain messages must be executed manually because Ethereum (i.e., the parent chain) does not support scheduled execution.
 
 However, applications can implement execution markets that allow third parties to execute messages for a fee.
 
 ### Persistence and expiry
 
-- **Child-to-parent chain messages**: - Persist indefinitely on the parent chain once included in the outbox.
+- **Child-to-parent chain messages**: Persist indefinitely on the parent chain once included in the outbox.
 
 ## Parent-to-child chain message lifecycle
 

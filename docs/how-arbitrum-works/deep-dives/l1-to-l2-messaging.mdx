@@ -4,7 +4,7 @@ description: 'Learn the fundamentals of parent to child chain messaging on Arbit
 author: pete-vielhaber
 sme: Mehdi Salehi
 user_story: As a current or prospective Arbitrum user, I need to learn more about messaging between parent to child chain messaging within Arbitrum.
-content_type: get-started
+content_type: concept
 ---
 
 import ImageZoom from '@site/src/components/ImageZoom';
@@ -17,7 +17,7 @@ This document explains the protocol-level concepts of parent-to-child messaging.
 
 In the [Bypassing the Sequencer](/build-decentralized-apps/transaction-lifecycle.mdx#bypassing-the-sequencer) section, we introduced an alternative way for users to submit transactions to a <a data-quicklook-from="child-chain">child chain</a> by going through the <a data-quicklook-from="parent-chain">parent chain</a>'s <a data-quicklook-from="delayed-inbox">Delayed Inbox</a> contract instead of sending them directly to the <a data-quicklook-from="sequencer">Sequencer</a>. This approach is one example of a parent-to-child messaging path. More broadly, parent-to-child chain messaging covers all ways to:
 
-- Submit child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
+- Submit a child chain bound <a data-quicklook-from="transaction">transaction</a> from a parent chain
 - Deposit `ETH` or native tokens from a parent chain to a child chain
 - Send arbitrary data or instructions from a parent chain to a child chain
 
@@ -48,7 +48,7 @@ Native token bridging refers to depositing a chain's native currency (the token 
 
 Arbitrum chains can use `ETH` or any other `ERC-20` tokens as their gas fee currency. <a data-quicklook-from="arbitrum-one">Arbitrum One</a> and Nova use `ETH` as their native token, while some Arbitrum chains opt for a custom gas token. For more details about chains that use custom gas tokens, refer to the [Custom gas token SDK](/build-decentralized-apps/custom-gas-token-sdk.mdx).
 
-Whether a chain uses `ETH` or a custom gas token, users can deposit the token from a parent chain (for Arbitrum One, it is Ethereum) to a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain's Delayed Inbox contract.
+Whether a chain uses `ETH` or a custom gas token, users can deposit tokens from a parent chain (for Arbitrum One, Ethereum) into a child chain. Below, we describe how to deposit `ETH` on chains that use `ETH` as the native gas token. The process for depositing custom gas tokens follows the same steps, except it uses the chain’s Delayed Inbox contract.
 
 ### Depositing native tokens
 
@@ -67,7 +67,7 @@ Note on caller type and aliasing:
 - **If the parent chain caller is an Externally Owned Account (EOA)**:
   - The deposited `ETH` will appear in the same EOA address on the child chain.
 - **If the parent chain caller is a contract**:
-  - The `ETH` will be deposited to the contract's aliased address on the child chain. In the next section, we will cover [Address aliasing](#address-aliasing).
+  - The `ETH` will get deposited into the contract's aliased address on the child chain. In the next section, we will cover [Address aliasing](#address-aliasing).
 - **If the caller is a `7702-enabled account` (EOA with temporary contract code)**:
   - The `ETH` goes to the aliased address, similar to contracts. This is due to the presence of runtime code during execution, and ensures consistent aliasing behavior post-EIP-7702.
 
@@ -83,7 +83,9 @@ Child_Alias = Parent_Contract_Address + 0x11110000000000000000000000000000000011
 
 #### Why aliasing?
 
-Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address. By introducing an offset, Arbitrum ensures that child chain contracts can distinguish between parent-chain contract calls and those from child chain native addresses.
+Address aliasing in Arbitrum is a security measure that prevents cross-chain exploits. Without it, a malicious actor could impersonate a contract on a child chain by simply sending a message from that contract's parent chain address.
+
+By introducing an offset, Arbitrum ensures that child-chain contracts can distinguish between parent-chain contract calls and those from child-chain native addresses.
 
 #### Computing the original parent chain address
 
@@ -113,13 +115,13 @@ Users can send child chain transactions through the Delayed Inbox in two primary
 Any message sent via the Delayed Inbox can ultimately produce a transaction on the child chain. These messages may or may not include a signature.
 
 - **Signed messages**: Signed by an EOA on the parent chain. This signature proves the sender is an EOA rather than a contract, preventing certain cross-chain exploits and bypassing the need for aliasing.
-- **Unsigned messages**: These do not include a signature from an EOA. For security reasons, the sender's address on the child chain must be _aliased_ when the message gets executed; see the [Address aliasing](#address-aliasing) section for details.
+- **Unsigned messages**: These do not include an EOA's signature. For security reasons, the sender’s address on the child chain must be _aliased_ when the message gets executed; see the [Address aliasing](#address-aliasing) section for details.
 
 Below, we describe the Delayed Inbox methods for each scenario.
 
 ### Signed messages
 
-Signed messages let a parent chain EOA prove ownership of an address, ensuring the child chain transaction will execute with `msg.sender` equal to the _signer's_ address on the child chain (rather than an alias). This mechanism is beneficial for bypassing the Sequencer if:
+Signed messages let a parent chain EOA prove ownership of an address, ensuring the child chain transaction executes with `msg.sender` set to the _signer's_ address on the child chain (rather than an alias). This mechanism is beneficial for bypassing the Sequencer if:
 
 - You want to force-include a transaction on a child chain in case of Sequencer downtime or censorship.
 - You need an operation on a child chain that explicitly requires EOA authorization (e.g., a withdrawal).
@@ -144,7 +146,7 @@ You can find additional details on message types in the next section of this doc
 
 :::note
 
-Please refer to the [Address aliasing](#address-aliasing) discussion for more background on address aliasing. This mechanism ensures that a parent chain contract can't impersonate a child chain address unless it provides a valid signature as an EOA.
+Refer to the [Address aliasing](#address-aliasing) discussion for more background. This mechanism ensures that a parent chain contract can't impersonate a child chain address unless it provides a valid signature as an EOA.
 
 :::
 

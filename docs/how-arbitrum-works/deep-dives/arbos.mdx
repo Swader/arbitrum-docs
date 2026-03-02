@@ -4,38 +4,40 @@ description: 'How ArbOS works as the child chain hypervisor, managing resources,
 author: petevielhaber
 sme: mehdi salehi
 user_story: As a current or prospective Arbitrum user, I need learn more about Nitros design.
-content_type: get-started
+content_type: concept
 ---
 
-ArbOS is the child EVM hypervisor for the Arbitrum chain, providing the execution environment for the chain. Acting as a trusted "system glue" component within the STF, ArbOS is responsible for:
+ArbOS is the child-EVM virtual machine monitor (VMM—aka hypervisor) for the Arbitrum chain, providing the execution environment for the chain. It acts as a trusted “system glue” component within the State Transition Function (STF).
 
-### 1. Managing network resources
+ArbOS is responsible for:
 
-It allocates and tracks the resources needed to execute transactions on the child chain.
+## 1. Managing network resources
 
-### 2. Block production
+ArbOS allocates and tracks the resources needed to execute transactions on the child chain.
+
+## 2. Block production
 
 ArbOS processes incoming sequencer data batches to produce child chain blocks, ensuring the state is updated correctly.
 
-### 3. Cross-chain messaging
+## 3. Cross-chain messaging
 
-It facilitates communication between the parent and child chains, supporting functionalities like Ether and token deposits and withdrawals.
+It facilitates communication between the parent and child chains, supporting features such as `ETH` and token deposits and withdrawals.
 
-### 4. Enhanced EVM execution
+## 4. Enhanced EVM execution
 
 ArbOS runs its instrumented Geth instance to execute smart contracts, incorporating additional logic specific to the child chain environment.
 
-### 5. Stylus-specific tasks in ArbOS
+## 5. Stylus-specific tasks in ArbOS
 
 ArbOS manages host I/O calls, memory operations, and execution context for Stylus transactions, ensuring efficient and deterministic processing with the WASM runtime.
 
-By offloading high-cost tasks from the parent chain, ArbOS enables them to be executed quickly and cost-effectively on the child chain. This design reduces computational and storage costs and offers significant flexibility, allowing the child chain code to evolve or be customized more easily than in a parent-chain-enforced architecture.
+By offloading high-cost tasks from the parent chain, ArbOS enables them to be executed quickly and cost-effectively on the child chain. This design reduces computational and storage costs while offering significant flexibility, allowing child chain code to evolve or be customized more easily than in a parent-chain-enforced architecture.
 
-While Ethereum's STF provides a secure, deterministic basis for state updates, Arbitrum's Nitro stack builds on this foundation with key modifications — ranging from dual gas accounting to cross-chain messaging — to optimize performance and flexibility. These innovations are realized through minimal yet strategic modifications to Geth, integrated seamlessly with ArbOS, forming the "geth sandwich."
+While Ethereum’s STF provides a secure, deterministic basis for state updates, Arbitrum’s Nitro stack builds on this foundation with key modifications—ranging from a dual-gas-account model to cross-chain messaging—optimizing performance and flexibility. These innovations are realized through minimal, yet strategic modifications to Geth that integrate seamlessly with ArbOS, forming the “Geth sandwich.”
 
 With the introduction of Stylus, Arbitrum extends its execution model beyond the EVM, enabling high-performance WASM-based smart contracts. This integration introduces additional modifications to Geth, ensuring compatibility with Stylus transactions while preserving Ethereum-like execution guarantees. These changes include handling Stylus-specific transaction types and ensuring smooth interaction between the EVM and WASM environments.
 
-In the following section, we'll dive deep into these modifications, exploring how Nitro leverages 'Geth at the core' and the custom enhancements provided by ArbOS to deliver an advanced, high-performance STF. Stylus-specific tasks within ArbOS are covered separately to highlight its role in managing execution, host I/O, and memory operations.
+In the following section, we’ll dive deep into these modifications, exploring how Arbitrum Nitro leverages “Geth at the core” and ArbOS's custom enhancements to deliver an advanced, high-performance STF. Stylus-specific tasks within ArbOS are covered separately to highlight its role in managing execution, host I/O, and memory operations.
 
 ## How precompiles work
 
@@ -43,7 +45,7 @@ ArbOS implements precompiles using a Solidity interface paired with a Golang bac
 
 ## Messages
 
-An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming sequencer message. A message includes one or more user transactions depending on load and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, ultimately, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
+An [`L1IncomingMessage`](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/incomingmessage.go#L54) represents an incoming sequencer message. A message includes one or more user transactions, depending on load, and is made into a [unique child chain block](https://github.com/OffchainLabs/nitro/blob/4ac7e9268e9885a025e0060c9ec30f9612f9e651/arbos/block_processor.go#L118). The child chain block may include additional system transactions while processing the message's user transactions. However, the relationship is still bijective: for every `L1IncomingMessage`, there is a child chain block with a unique child chain block hash, and for every child chain block after chain initialization, there was an `L1IncomingMessage` that made it. A sequencer batch may contain more than one `L1IncomingMessage`.
 
 ## Retryables
 
