@@ -40,7 +40,7 @@ The Stylus SDK includes `testing`, a module that provides all the tools you need
 - **TestVMBuilder**: A builder pattern to conveniently configure the test VM
 - Built-in utilities for mocking calls, storage, and other EVM operations
 
-### Key Components
+### Key components
 
 Here are the components you'll use when testing your Stylus contracts:
 
@@ -503,28 +503,28 @@ cargo test test_give_cupcake
 
 ## Testing best practices
 
-1. **Test Isolation**
+1. **Test isolation**
 
    - Create a new `TestVM` instance for each test
    - Avoid relying on the state from previous tests
 
-2. **Comprehensive Coverage**
+2. **Comprehensive coverage**
 
    - Test both success and error conditions
    - Test edge cases and boundary conditions
    - Verify all public functions and important state transitions
 
-3. **Clear Assertions**
+3. **Clear assertions**
 
    - Use descriptive error messages in assertions
    - Make assertions that verify the actual behavior you care about
 
-4. **Realistic Scenarios**
+4. **Realistic scenarios**
 
    - Test real-world usage patterns
    - Include tests for authorization and access control
 
-5. **Gas and Resource Efficiency**
+5. **Gas and resource efficiency**
    - For complex contracts, consider testing gas usage patterns
    - Look for storage optimization opportunities
 
