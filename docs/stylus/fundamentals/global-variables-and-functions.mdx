@@ -742,7 +742,9 @@ Pays for memory growth in WASM pages.
 pub fn pay_for_memory_grow(&self, pages: u16)
 ```
 
-**Note:** The `#[entrypoint]` macro handles this automatically. Manual calls are not recommended and will unproductively consume gas.
+:::note
+The `#[entrypoint]` macro handles this automatically. Manual calls are not recommended and will unproductively consume gas.
+:::
 
 ## Complete Example
 
