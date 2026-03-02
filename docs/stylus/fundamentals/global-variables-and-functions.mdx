@@ -712,7 +712,9 @@ pub fn storage_load_bytes32(&self, key: U256) -> B256
 
 **Equivalent to**: Solidity's `SLOAD` opcode
 
-**Note:** Storage is cached for efficiency. Use the SDK's storage types instead of direct storage access.
+:::note
+Storage is cached for efficiency. Use the SDK's storage types instead of direct storage access.
+:::
 
 ### `flush_cache(clear)`
 
