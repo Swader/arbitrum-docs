@@ -1386,7 +1386,12 @@ const sidebars = {
             {
               type: 'doc',
               label: 'Bridge Ether (ETH)',
-              id: 'build-decentralized-apps/token-bridging/02-token-bridge-ether',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-ether',
+            },
+            {
+              type: 'doc',
+              label: 'Bridge ERC-20 tokens',
+              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
             },
             {
               type: 'doc',
