@@ -1390,11 +1390,6 @@ const sidebars = {
             },
             {
               type: 'doc',
-              label: 'Bridge ERC-20 tokens',
-              id: 'build-decentralized-apps/token-bridging/token-bridge-erc20',
-            },
-            {
-              type: 'doc',
               label: 'Deposit tokens',
               id: 'build-decentralized-apps/token-bridging/deposit-tokens',
             },
